@@ -4,23 +4,26 @@ interface IProps {
     addNote(note: string): void;
 }
 
-const NewNote: React.FC<IProps> = ({ addNote }) => {
+const NewNote: React.FC<IProps> = (props) => {
 
     const [note, setNote] = useState('');
 
-    const updateNote = (e: React.FormEvent<HTMLInputElement>) => {
-
-        // setNote(e.target.value)
+    const updateNote = (e: any) => {
+        if (e.target.value) {
+            setNote(e.target.value)
+        }
     }
 
-
     const onAddNote = () => {
-        addNote(note);
-        setNote('')
+        if (note) {
+            props.addNote(note);
+            setNote('');
+        }
+
     }
     return (
         <div>
-            <input type="text" name="note" placeholder="Note" onChange={updateNote} />
+            <input type="text" value={note} name={note} placeholder="Note" onChange={updateNote} />
             <button onClick={() => { onAddNote() }}> Add Note </button>
         </div>
     );

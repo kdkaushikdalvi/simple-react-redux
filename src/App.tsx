@@ -1,23 +1,33 @@
-import React, { useState } from 'react';
-import NewNote from './NewNote';
-import './App.css';
+import React, { Fragment } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { NotesState } from './notesReducer';
+import { addNoteAction } from './actions';
 
-interface IProps {
-  addNote(note: string[]): void;
-}
+import NewNote from './NewNote';
 
 const App = () => {
 
+  const notesArray = useSelector<NotesState, NotesState['notes']>((state) => state.notes)
+  const dispatch = useDispatch();
+
+  const addNote = (note: any) => {
+    dispatch(addNoteAction(note))
+  }
+
   return (
-    <div className="App">
-      <NewNote addNote={() => { alert("HI")}} />
-      <div>
-        <hr />
-        <ul>
-          Some Note
-        </ul>
+    <Fragment>
+      <div className="app-container">
+        <NewNote addNote={(note) => { addNote(note) }} />
       </div>
-    </div>
+      <div className="list-container">
+          <ul>{
+            notesArray.map((note, key) => {
+              return (<li key={key}>{note}</li>)
+            })
+          }
+          </ul>
+        </div>
+    </Fragment>
   );
 }
 
